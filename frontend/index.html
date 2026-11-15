@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas de actividad de incendios · MODIS + VIIRS</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div><h1>Atlas de actividad de incendios</h1>
+  <p>Detecciones satelitales MODIS (1 km) y VIIRS (375 m) armonizadas en un solo registro desde 2000.</p></div>
+  <span id="badge" class="badge">Cargando…</span>
+</header>
+<form class="bar" onsubmit="return false">
+  <label>País<select id="country"><option value="">Todos los países</option></select></label>
+  <label>Desde<select id="y0"></select></label>
+  <label>Hasta<select id="y1"></select></label>
+  <label>Medida<select id="metric"><option value="harmonized">Armonizada (equiv. MODIS)</option><option value="modis">MODIS</option><option value="viirs">VIIRS</option></select></label>
+  <label class="chk"><input type="checkbox" id="fill"> Colorear países por total</label>
+  <button type="button" id="draw">Seleccionar área arrastrando</button>
+  <button type="button" id="clear" class="ghost">Limpiar selección</button>
+</form>
+<main>
+  <section class="hero">
+    <div class="panel mapbox"><h2>Mapa satelital de detecciones</h2>
+      <div id="map" aria-label="Mapa: haz clic en un país o arrastra para marcar un área"></div>
+      <p class="hint" id="hint">Haz clic en un país, usa el selector, o pulsa «Seleccionar área» y arrastra un rectángulo. Haz clic en un país o arrastra un rectángulo con «Seleccionar área». Rojo: zonas calientes. Activa «Colorear países» para ver el total de cada país en grises.</p></div>
+    <div class="panel"><h2>Países con más detecciones</h2><div class="rankbox"><canvas id="rank"></canvas></div></div>
+  </section>
+  <div class="kpis" id="kpis"></div>
+  <div class="panel"><div class="phead"><h2 id="calTitle">Calendario diario</h2>
+    <div class="seg" role="group" aria-label="Modo del calendario"><button type="button" data-m="int" class="on">Intensidad</button><button type="button" data-m="anom">Anomalía</button></div></div>
+    <canvas id="cal"></canvas><div id="tip" role="tooltip"></div>
+    <p class="legend" id="legend"></p></div>
+  <div class="grid2">
+    <div class="panel"><h2>Serie mensual</h2><canvas id="ts"></canvas></div>
+    <div class="panel"><h2>Total anual</h2><canvas id="yr"></canvas></div>
+  </div>
+  <div class="grid2">
+    <div class="panel"><div class="phead"><h2>Periodos críticos</h2></div>
+      <fieldset><label>Anomalía mínima: <output id="zv">2.0</output> σ<input type="range" id="z" min="1" max="4" step="0.5" value="2"></label>
+      <label>Días consecutivos mínimos: <output id="dv">3</output><input type="range" id="d" min="1" max="10" value="3"></label></fieldset>
+      <ol id="events"></ol><button type="button" id="export" class="ghost">Descargar serie diaria (CSV)</button></div>
+    <div class="panel note" id="method"></div>
+  </div>
+</main>
+<footer>Datos: NASA FIRMS (MODIS C6.1 y VIIRS 375 m). Imagen base: NASA Blue Marble vía GIBS. Contornos: Natural Earth (world-atlas). Los conteos son detecciones térmicas, no superficie quemada.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="/shared/harmonize.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
